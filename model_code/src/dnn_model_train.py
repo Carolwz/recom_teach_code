@@ -1,3 +1,11 @@
+# 训练dnn模型：包括数据加载、模型初始化、定义损失函数和优化器，然后进行多轮训练，在训练过程中记录损失和验证集的 AUC 指标，并定期保存模型参数。
+# 1、get_data(ak_config)：从配置文件 ak_config 中获取相关信息，连接到 ODPS 项目，读取数据，进行数据处理（如删除非特征列、分离特征和标签），并将数据划分为训练集和测试集，最后返回训练集和测试集的特征与标签的 NumPy 数组。
+# 2、my_collate_fn(batch)：自定义的数据处理函数，用于将一批样本的特征进行填充并转换为 PyTorch 张量，同时处理标签。
+# 3、train_model(train_loader, test_loader, model, criterion, optimizer, num_epochs=2)：
+#   参数：train_loader 为训练集数据加载器，test_loader 为测试集数据加载器，model 是要训练的模型，criterion 是损失函数，optimizer 是优化器，num_epochs 是训练的轮数（默认为 2）。
+#   功能：在指定的轮数内进行训练，每一轮中遍历训练集，计算损失并进行反向传播更新模型参数。在训练过程中，每隔一定步数记录训练损失到 TensorBoard，每隔 2000 步在测试集上评估模型并记录 AUC 指标，同时保存模型参数。每一轮结束后也保存一次模型参数。最后在训练结束后，再次在测试集上评估模型并记录 AUC 指标。
+
+
 import pandas as pd
 import lightgbm as lgb
 from sklearn.model_selection import train_test_split
@@ -44,7 +52,7 @@ def train_model(train_loader, test_loader, model, criterion, optimizer, num_epoc
             labels = labels
             optimizer.zero_grad()
             outputs = model(features)
-            labels = torch.unsqueeze(labels,dim=1)
+            labels = torch.unsqueeze(labels,dim=1) #处理lable和feature维度不同的问题
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()

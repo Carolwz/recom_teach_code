@@ -1,3 +1,5 @@
+# 放一些dnn常用的参数
+
 config={
     "embedding_dim":32,
     "num_embedding":20000,
