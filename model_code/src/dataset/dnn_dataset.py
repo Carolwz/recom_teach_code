@@ -1,3 +1,9 @@
+# 这些类的主要作用是将原始数据转换为 PyTorch 可以处理的数据集格式，以便后续使用 DataLoader 进行批量加载，用于模型的训练、验证或测试。
+# MyDataset 和 MyPriorDataset 继承自 torch.utils.data.Dataset，适用于可以随机访问的数据，通常用于小到中等规模的数据集。
+# MyIterDataset 继承自 torch.utils.data.IterableDataset，适用于大规模数据集或流式数据，数据是按顺序逐个生成的，不支持随机访问。
+
+
+
 import torch
 import torch.nn as nn 
 import torch.nn.functional as F 

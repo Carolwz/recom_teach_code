@@ -1,3 +1,11 @@
+# 这段代码主要完成数据获取、处理、评估指标计算及批量处理功能：
+# 1. **数据获取**：
+#     (1)get_data(ak_config)：连接 ODPS 项目（指在代码中建立与阿里云 ODPS 平台上特定项目的通信渠道），从指定表读数据，删除非特征列，划分训练集与测试集，返回特征和标签的 NumPy 数组
+#     (2)get_data_test(ak_config, brand_id)：连接 ODPS 项目，读取指定品牌 ID 的测试数据，处理后返回特征和标签的 NumPy 数组
+#     (3)get_data_test_moe(ak_config)：连接 ODPS 项目，读取指定表前 3000 条测试数据，处理后返回特征和标签的 NumPy 数组
+# 2. **评估指标计算**：`calculate_top_k_ratio` 函数计算不同 `top-k` 比例下的正例比例。
+# 3. **数据批量处理**：`my_collate_fn` 和 `seq_collate_fn` 作为自定义函数，将一批样本的特征填充为等长并转为 PyTorch 张量，后者还会生成对应掩码。 
+
 import pandas as pd
 import lightgbm as lgb
 from sklearn.model_selection import train_test_split
