@@ -28,6 +28,7 @@ print('train dataset finish')
 dataloader_train = DataLoader(dataset_train, batch_size=dnn_config["batch_size"], shuffle=False, collate_fn=my_collate_fn)
 print('train dataloader finish')
 
+# 修改部分，分品牌获取test数据，这里是测试集还是验证集？
 brands = ['b47686','b56508','b62063','b78739']
 dataset_test_dict = {}
 dataloader_test_dict = {}
