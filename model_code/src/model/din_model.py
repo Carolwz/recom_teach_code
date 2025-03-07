@@ -31,10 +31,16 @@ class LocalActivationUnit(nn.Module):
         attention_logits = self.fc2(x).squeeze(-1)  #移除张量(batch_size, seq_len, 1)中最后一个维度变成(batch_size, seq_len)
         
         # Apply mask to remove padding influence
+            # 在计算注意力权重时，​忽略填充位置的影响。
+            # 原理：Softmax特性，在计算Softmax时，-inf 的指数趋近于0，因此填充位置的注意力权重会趋近于0。
+            # 功能：将 mask 中值为0的位置（填充位置）的注意力得分替换为 -inf（负无穷）。
         attention_logits = attention_logits.masked_fill(mask == 0, float('-inf'))
         
         # Apply softmax to compute attention weights
+            # 对attention_logits中的第二个维度seq_len进行 Softmax 归一化，输出形状：(batch_size, seq_len)
+            # 再将(batch_size, seq_len)扩充成(batch_size, seq_len, 1)
         attention_weights = F.softmax(attention_logits, dim=1).unsqueeze(-1)
+        ​
         
         # Compute weighted sum of user behavior embeddings to get user interests
         user_interests = torch.sum(attention_weights * user_behaviors, dim=1)
