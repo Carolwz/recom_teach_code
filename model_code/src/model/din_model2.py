@@ -1,3 +1,5 @@
+# DIN(clk和pay)
+
 import torch
 import torch.nn as nn 
 import torch.nn.functional as F 
@@ -50,6 +52,7 @@ class DinModel(nn.Module):
         for ff in self.config["feature_col"]:
             if ff != 'clk_brand_seq' and ff != 'pay_brand_seq':
                 embedding_dict[ff] = torch.sum(self.embedding(features[ff]), dim=1)
+        # 同时对clk和pay用了ActivationUnit
         embedding_dict['clk_brand_seq'] = self.att(self.embedding(features['clk_brand_seq']), embedding_dict['target_brand_id'], mask['clk_brand_seq'])
         embedding_dict['pay_brand_seq'] = self.att(self.embedding(features['pay_brand_seq']), embedding_dict['target_brand_id'], mask['pay_brand_seq'])
         x = torch.cat([embedding_dict[ff] for ff in self.config["feature_col"]], dim=1)
