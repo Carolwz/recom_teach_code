@@ -1,5 +1,3 @@
-hidden_units表示embedding维度
-
 import torch
 import torch.nn as nn 
 import torch.nn.functional as F 
@@ -8,7 +6,9 @@ from torch.utils.tensorboard import SummaryWriter
 class LocalActivationUnit(nn.Module):
     def __init__(self, hidden_units):
         super(LocalActivationUnit, self).__init__()
-        self.fc1 = nn.Linear(hidden_units * 4, hidden_units) # 乘4是因为后面concat了4个特征
+        # 这里hidden_units表示embedding_dim(可从后面的输入看出)
+        # 乘4是因为后面concat了4个特征
+        self.fc1 = nn.Linear(hidden_units * 4, hidden_units) 
         self.fc2 = nn.Linear(hidden_units, 1)
 
     def forward(self, user_behaviors, target_item, mask):
