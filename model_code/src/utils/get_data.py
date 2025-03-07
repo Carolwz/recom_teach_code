@@ -18,6 +18,7 @@ from torch.nn.utils.rnn import pad_sequence
 from config.dnn_config import config as dnn_config
 import torch
 
+# 获取训练集和验证集（不是测试集）
 def get_data(ak_config):
     o = ODPS(
         ak_config["access_id"],
@@ -76,6 +77,7 @@ def calculate_top_k_ratio(predictions, labels, top_k_list):
     
     return ratios
 
+# 获取真正的测试集，但指定brand_id
 def get_data_test(ak_config, brand_id):
     o = ODPS(
         ak_config["access_id"],
