@@ -2,7 +2,7 @@
 
 config={
     "embedding_dim":32,
-    "num_embedding":20000,
+    "num_embedding":20000, #表示 ​Embedding 表的行数，即需要嵌入的离散特征的总类别数。
     "lr":0.001,
     "batch_size":512,
     "num_experts":3,
