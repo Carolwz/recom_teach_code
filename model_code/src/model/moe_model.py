@@ -69,7 +69,9 @@ class MoeModel(nn.Module):
         self.embedding = nn.Embedding(num_embeddings=self.config["num_embedding"], embedding_dim =self.config["embedding_dim"], padding_idx=0)
         
         self.att = LocalActivationUnit(self.config["embedding_dim"])
+        # 构建多个专家网络模型，每个专家网络模型的输入维度为 embedding_dim * len(feature_col)，输出维度为1。使用 nn.ModuleList 管理多个专家网络。
         self.experts = nn.ModuleList([Expert(self.config["embedding_dim"]*len(self.config["feature_col"])) for _ in range(self.config["num_experts"])])
+        # 门网络，输入维度为 embedding_dim * len(features_gate_col)，输出维度为 num_experts
         self.gate = Gate(self.config["embedding_dim"]*len(self.config["features_gate_col"]), self.config["num_experts"])
         
     def forward(self, features, mask):
