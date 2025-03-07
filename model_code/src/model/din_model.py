@@ -1,3 +1,5 @@
+hidden_units表示embedding维度
+
 import torch
 import torch.nn as nn 
 import torch.nn.functional as F 
@@ -6,14 +8,18 @@ from torch.utils.tensorboard import SummaryWriter
 class LocalActivationUnit(nn.Module):
     def __init__(self, hidden_units):
         super(LocalActivationUnit, self).__init__()
-        self.fc1 = nn.Linear(hidden_units * 4, hidden_units)
+        self.fc1 = nn.Linear(hidden_units * 4, hidden_units) # 乘4是因为后面concat了4个特征
         self.fc2 = nn.Linear(hidden_units, 1)
 
     def forward(self, user_behaviors, target_item, mask):
         # user_behaviors shape: (batch_size, seq_len, hidden_units)
         # target_item shape: (batch_size, hidden_units)
         # mask shape: (batch_size, seq_len)
-        
+
+        #将target_item由(batch_size, hidden_units)扩充成与user_behaviors一样的shape：(batch_size, seq_len, hidden_units)
+            # unsqueeze(i)在张量中位置i增加一个维度
+            # squeeze(i)移除张量中最后一个维度
+            # expand(-1, seq_len, -1)：将维度1扩展为seq_len（用户行为序列长度），-1表示维度保持不变。
         seq_len = user_behaviors.size(1)
         target_item = target_item.unsqueeze(1).expand(-1, seq_len, -1)
         
