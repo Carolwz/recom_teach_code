@@ -1,3 +1,4 @@
+# DIN ('pay_brand_seq')
 # 代码里好像没用dice，用的relu激活
 
 import torch
