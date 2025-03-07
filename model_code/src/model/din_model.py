@@ -28,7 +28,7 @@ class LocalActivationUnit(nn.Module):
         
         # Forward through two dense layers with activation
         x = torch.relu(self.fc1(interactions))
-        attention_logits = self.fc2(x).squeeze(-1)
+        attention_logits = self.fc2(x).squeeze(-1)  #移除张量(batch_size, seq_len, 1)中最后一个维度变成(batch_size, seq_len)
         
         # Apply mask to remove padding influence
         attention_logits = attention_logits.masked_fill(mask == 0, float('-inf'))
