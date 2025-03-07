@@ -1,3 +1,5 @@
+# 代码里好像没用dice，用的relu激活
+
 import torch
 import torch.nn as nn 
 import torch.nn.functional as F 
@@ -43,6 +45,7 @@ class LocalActivationUnit(nn.Module):
         ​
         
         # Compute weighted sum of user behavior embeddings to get user interests
+        # 提前加权求和了
         user_interests = torch.sum(attention_weights * user_behaviors, dim=1)
         return user_interests
 
@@ -56,7 +59,8 @@ class DinModel(nn.Module):
         self.fc3 = nn.Linear(128,1)
         
         self.att = LocalActivationUnit(self.config["embedding_dim"])
-        
+
+    # 以下只对了'pay_brand_seq'用ActivationUnit算同台权值，其他的跟base模型一样直接加总
     def forward(self, features, mask):
         embedding_dict = {}
         for ff in self.config["feature_col"]:
